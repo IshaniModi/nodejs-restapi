@@ -11,6 +11,7 @@ filterbyDate : filter movies from to and from dates
 
 'use strict';
 var movie_model = require('../models/movieModel');
+var moment = require('moment');
 module.exports = {
 
     list_all_movies : listAll,
@@ -32,9 +33,9 @@ function listAll(req,res){
 
 function insertNewMovie(req, res){
     var movieObj = req.body;
-    if(!movieObj){
-        res.status(400).send({ error:true, message: 'Please provide insert movie details' });
-    }
+    var dateRelease = movieObj.dateRelease;
+if(!dateValidation(dateRelease))
+        res.status(400).send({ error:true, message: 'Please insert valid date in YYYY-MM-DD format' });
     else{       
         movie_model.createNewMovie(movieObj, function(err, movie) {
             if (err)
@@ -75,12 +76,21 @@ function filterbyDate(req,res){
   var dateObj = req.body;
   var fromDate = dateObj.fromdate;
   var toDate = dateObj.todate;
-  console.log(JSON.stringify(dateObj));
+   if(!dateValidation(fromDate) || !dateValidation(toDate))
+        res.status(400).send({ error:true, message: 'Please insert valid date in YYYY-MM-DD format' });
+  else{movie_model.filterbyDate(dateObj, function(err, movie) {
+      if (err)
+        res.send(err);
+      res.json({ result : movie});
+    });
+  }
+}
 
-  movie_model.filterbyDate(dateObj, function(err, movie) {
-  if (err)
-    res.send(err);
-  res.json({ result : movie});
-});
+function dateValidation(date)
+{
+  if(!moment(date, "YYYY-DD-MM").isValid())
+    return false;
+  else
+    return true;
 }
 

@@ -1,6 +1,7 @@
 const express = require('express'),   
       app = express(),
       bodyParser = require('body-parser');
+   
 
 var port = process.env.PORT || 3000;
 
@@ -14,7 +15,8 @@ app.use(function(req, res, next){
 		password : 'root',
 		database : 'movies_db'
     });
-    
+   
+
     connection_string.connect();
 	//res.locals.connect();
 	next();
