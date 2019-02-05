@@ -40,7 +40,11 @@ function insertNewActor(req, res){
         Actor_model.createNewActor(ActorObj, function(err, Actor) {
             if (err)
               res.send(err);
-            res.json(Actor);
+              if( Actor !== undefined ||  Actor.length != 0)
+                 res.json(Actor);
+                else
+                res.send({ message: 'Error inserting actor...' });
+                
           });
         }
     };

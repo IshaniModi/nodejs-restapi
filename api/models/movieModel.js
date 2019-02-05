@@ -23,19 +23,20 @@ module.exports = {
 
 function createMovie(movie, result) {  
     let sqlQuery = "SELECT * FROM movie_detail WHERE movie_name = ?";
-    dbCon.query(sqlQuery, movie.movie_name, function(error, results){
-	if(error){
-	    dbut.ErrorHandle(error,results);
-	}
- 	if(results.length){
-      result(null, results)
-    }else{
-
-   var dateParts = movie.dateRelease.split("-");
-   movie.Year=dateParts[0];
-      console.log(movie);
-    dbut.dbTransaction("Insert into movie_detail SET ?",movie,result);
-	}
+    dbCon.query(sqlQuery, movie.movie_name, function(error, res){
+        if(error){
+            dbut.ErrorHandle(error,res);
+        }
+        console.log(res);
+      if(res.length ==0 ){
+           var dateParts = movie.dateRelease.split("-");
+             movie.Year=dateParts[0];
+            console.log(movie);
+            dbut.dbTransaction("Insert into movie_detail SET ?",movie,result);
+    }
+    else{
+        result(null,res);
+    }
 });
  
 };

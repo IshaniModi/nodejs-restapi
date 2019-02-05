@@ -22,14 +22,16 @@ module.exports = {
 
 function createActor(actor, result) {  
     let sqlQuery = "SELECT * FROM actor WHERE actor_name = ?";
-    dbCon.query(sqlQuery, actor.actor_Name, function(error, results){
+     dbCon.query(sqlQuery, actor.actor_name, function(error, res){
         if(error){
-            dbut.ErrorHandle(error,results);
+            dbut.ErrorHandle(error,res);
         }
-    if(results.length){
-    result(null, results)
-    }else{
-        dbut.dbTransaction("Insert into actor SET ?",actor,result);
+        console.log(res);
+      if(res.length ==0 ){
+             dbut.dbTransaction("Insert into actor SET ?",actor,result);
+    }
+    else{
+        result(null,res);
     }
     });
    
