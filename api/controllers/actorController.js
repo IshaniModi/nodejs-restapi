@@ -20,11 +20,14 @@ module.exports = {
 }
 
 function listAll(req,res){
-    Actor_model.listAllActors(function(err, Actor) {
+    Actor_model.listAllActors(function(err, actor) {
       if (err)
           res.send(err);
-          console.log('res', Actor);
-        res.send(Actor);
+          console.log('res',  actor);
+    if( actor === undefined ||  actor.length == 0)
+          res.send({ message: 'No actors found in the database please insert one..' });
+       else
+        res.send( actor);
       });
 }
 
@@ -44,10 +47,14 @@ function insertNewActor(req, res){
 
 
   function getActor(req, res) {
-  Actor_model.getActorById(req.params.a_Id, function(err, Actor) {
-    if (err)
-      res.send(err);
-    res.json(Actor);
+     Actor_model.getActorById(req.params.a_Id, function(err, actor) {
+     if (err)
+       res.send(err);
+      console.log('res',  actor);
+  if( actor === undefined ||  actor.length == 0)
+      res.send({ message: 'Actor with Id '+ req.params.a_Id +'not found in the database..' });
+         else
+    res.json(actor);
   });
 };
 

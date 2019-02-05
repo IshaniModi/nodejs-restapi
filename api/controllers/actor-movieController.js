@@ -22,6 +22,10 @@ function listAllActorMovie(req,res){
     ActorMovie_model.listActorsByMovie( req.body, function(err, Actor) {
       if (err)
            res.send(err);
+        
+      if( Actor === undefined ||  Actor.length == 0)
+           res.send({ message: 'No actors found in the movie ' + req.body.movie_name });
+        else   
             res.json(Actor);
           });
         }
@@ -29,7 +33,10 @@ function listAllActorMovie(req,res){
 function listMovieByActor(req,res){
     ActorMovie_model.listMovieByActor( req.body, function(err, movie) {
         if (err)
-            res.send(err);
+        res.send(err);
+        if( movie === undefined ||  movie.length == 0)
+           res.send({ message: 'No movies found for the actor ' + req.body.actor_name });
+        else   
             res.json(movie);
             });
         }
@@ -53,6 +60,9 @@ function insertMovieActor(req, res){
         ActorMovie_model.filterByYear( req.params.year, function(err, filterobj) {
           if (err)
             res.send(err);
+         if( filterobj === undefined ||  filterobj.length == 0)
+            res.send({ message: 'Movies for the year ' +  req.params.year + ' not found..' });
+               else   
           res.json({ message: 'The movie for the year ' + req.params.year , result : filterobj});
         });   
       }

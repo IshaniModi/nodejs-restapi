@@ -27,6 +27,9 @@ function listAll(req,res){
       if (err)
           res.send(err);
           console.log('res', movie);
+    if(movie === undefined || movie.length == 0)
+          res.send({ message: 'No movies found in the database please insert one' });
+       else
         res.send(movie);
       });
 }
@@ -50,7 +53,10 @@ if(!dateValidation(dateRelease))
   movie_model.getMovieById(req.params.movie_id, function(err, movie) {
     if (err)
       res.send(err);
-    res.json(movie);
+      if(movie === undefined || movie.length == 0)
+      res.send({ message: 'Movie with id ' +  req.params.movie_id + ' not found..'});
+          else
+        res.json(movie);
   });
 };
 
@@ -68,7 +74,7 @@ function deleteMovie(req, res) {
   movie_model.deleteMovieById( req.params.movie_id, function(err, movie) {
     if (err)
       res.send(err);
-    res.json({ message: 'movie deleted successfully' , result : movie});
+    res.json({ message: 'Movie deleted successfully' , result : movie});
   });
 };
 
@@ -81,14 +87,17 @@ function filterbyDate(req,res){
   else{movie_model.filterbyDate(dateObj, function(err, movie) {
       if (err)
         res.send(err);
-      res.json({ result : movie});
+      if(movie === undefined || movie.length == 0)
+          res.send({ message: 'No movies found' });
+       else
+          res.json({ result : movie});
     });
   }
 }
 
 function dateValidation(date)
 {
-  if(!moment(date, "YYYY-DD-MM").isValid())
+  if(!moment(date, "YYYY-MM-DD").isValid())
     return false;
   else
     return true;

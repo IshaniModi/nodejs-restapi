@@ -57,8 +57,7 @@ function deleteMovieById(movie_id, result){
 };
 
 function listAllMovies(result){
-    console.log("In a method");
-    dbut.dbTransactionParam("Select * from movie_detail",result);
+     dbut.dbTransactionParam("Select * from movie_detail",result);
 }
 
 function filterbyDate(dateObj,result)
